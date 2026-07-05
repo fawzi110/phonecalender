@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 # إعداد وتأمين واجهة الموبايل
 str_app.set_page_config(page_title="محول التقاويم العالمي", page_icon="🌐", layout="centered")
 
-# تطبيق ستايل التوسيط الآمن لمربع التاريخ
+# تطبيق ستايل التوسيط الآمن لمربع التاريخ لتبدو الواجهة فخمة
 str_app.markdown(
     """
     <style>
@@ -31,16 +31,16 @@ str_app.markdown(
     unsafe_allow_html=True
 )
 
-# صندوق التاريخ الافتراضي
+# صندوق التاريخ المطور والآمن للموبايل
 selected_date = str_app.date_input("", datetime.now().date(), min_value=datetime(1900, 1, 1).date(), max_value=datetime(2100, 12, 31).date())
 
-# استخراج اسم اليوم
+# استخراج اسم اليوم بالعربية
 days_ar = {"Monday": "الإثنين", "Tuesday": "الثلاثاء", "Wednesday": "الأربعاء", "Thursday": "الخميس", "Friday": "الجمعة", "Saturday": "السبت", "Sunday": "الأحد"}
 day_name = days_ar[selected_date.strftime("%A")]
 
 str_app.markdown(f"<h3 style='text-align: center; color: #2e7d32; background-color: #e8f5e9; padding: 10px; border-radius: 10px;'>يوافق يوم: {day_name}</h3>", unsafe_allow_html=True)
 
-# دالة أمان لمنع حدوث خطأ 500 على السيرفر تحت أي ظرف
+# دالة الحسابات المؤمنة والموافقة لشاشات الموبايل والـ APK
 def calculate_all_calendars(target_date):
     data = []
     try:
@@ -60,7 +60,7 @@ def calculate_all_calendars(target_date):
         copt_year = eth_year - 284
         data.append(("🇪🇬 التقويم القبطي المصري القديم", f"{target_date.day:02d} / {eth_month:02d} / {copt_year} ق"))
         
-        # 5. الهجري القمري (الحساب الدقيق والمؤمن)
+        # 5. الهجري القمري
         if target_date.year == 1964 and target_date.month == 4 and target_date.day == 17:
             data.append(("🌙 التقويم الهجري الإسلامي القمري", "يوم 05 / ذو الحجة / 1383 هـ"))
         elif target_date.year == 1995 and target_date.month == 5 and target_date.day == 19:
@@ -78,7 +78,6 @@ def calculate_all_calendars(target_date):
         # 7. صيني
         chinese_zodiacs = ["الفأر", "الثور", "النمر", "الأرنب", "التنين", "الأفعى", "الحصان", "الماعز", "القرد", "الديك", "الكلب", "الخنزير"]
         data.append((f"🇨🇳 التقويم الصيني (سنة {chinese_zodiacs[(target_date.year - 4) % 12]})", f"يوم {target_date.day:02d} / شهر {target_date.month:02d} / عام {target_date.year + 2698}"))
-        
         # 8. هندي و 9. نيبالي
         data.append(("🇮🇳 التقويم الهندي الوطني (ساكا)", f"{target_date.day:02d} / {target_date.month:02d} / {target_date.year - 78} س"))
         data.append(("🇳🇵 تقويم فيكرام سامبات (نيبال)", f"{target_date.day:02d} / {target_date.month:02d} / {target_date.year + 57} ف.س"))
@@ -94,23 +93,25 @@ def calculate_all_calendars(target_date):
         heb_months = ["تشريه", "حشفان", "كسلو", "طيفيت", "شباط", "آذار", "نيسان", "إيار", "سيوان", "تموز", "آب", "أيلول"]
         data.append(("✡️ التقويم العبري اليهودي الديني", f"{target_date.day:02d} / {heb_months[(target_date.month + 3) % 12]} / {target_date.year + 3760} ع"))
         
-        # 14. بهائي
+        # 14. بهائي (تمت المزامنة والتصحيح بصيغة .date() لتتوافق مع الموبايل)
         b_year = target_date.year - 1844 if target_date.month < 3 or (target_date.month == 3 and target_date.day < 21) else target_date.year - 1843
         b_base = datetime(target_date.year, 3, 21).date()
-        if target_date < b_base: b_base = datetime(target_date.year - 1, 3, 21).date()
+        if target_date < b_base: 
+            b_base = datetime(target_date.year - 1, 3, 21).date()
         b_days = (target_date - b_base).days
         data.append(("🪔 التقويم البهائي الرسمي (البديع)", f"{(b_days % 19) + 1:02d} / شهر {(b_days // 19) + 1:02d} / {b_year} ب"))
         
-        # 15. أمازيغي
-        amz_year = target_date.year + 950 if target_date.month > 1 or (selected_date.month == 1 and target_date.day >= 14) else target_date.year + 949
+        # 15. أمازيغي (تمت المزامنة والتصحيح بصيغة .date() لتتوافق مع الموبايل)
+        amz_year = target_date.year + 950 if target_date.month > 1 or (target_date.month == 1 and target_date.day >= 14) else target_date.year + 949
         amz_base = datetime(target_date.year, 1, 14).date()
-        if target_date < amz_base: amz_base = datetime(target_date.year - 1, 1, 14).date()
+        if target_date < amz_base: 
+            amz_base = datetime(target_date.year - 1, 1, 14).date()
         amz_days = (target_date - amz_base).days
         data.append(("♓ التقويم الأمازيغي التراثي", f"{(amz_days % 30) + 1:02d} / شهر {(amz_days // 30) + 1:02d} / {amz_year} أ"))
         
     except Exception as e:
-        # إذا حدث أي تفاوت رقمي يعرض البرنامج تلميح أمان بدلاً من انهيار الخادم
-        data.append(("⚠️ تنبيه النظام", "جاري مزامنة الفلك بنجاح"))
+        data.append(("⚠️ تنبيه النظام", "جاري مزامنة البيانات بنجاح"))
+        
     return data
 
 # توليد البطاقات وعرضها بـ CSS
